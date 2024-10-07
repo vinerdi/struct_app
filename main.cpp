@@ -1,87 +1,65 @@
 #include <iostream>
+#include <string>
 
-class Fraction {
+class Overcoat {
 private:
-    int numerator;
-    int denominator;
-
-    void simplify() {
-        int gcd = calculateGCD(numerator, denominator);
-        numerator /= gcd;
-        denominator /= gcd;
-    }
-
-    int calculateGCD(int a, int b) {
-        while (b != 0) {
-            int temp = b;
-            b = a % b;
-            a = temp;
-        }
-        return a;
-    }
+    std::string type;
+    double price;
 
 public:
-    Fraction(int num, int denom) : numerator(num), denominator(denom) {
-        if (denom == 0) {
-            throw "Denominator cannot be zero";
+    // Конструктор
+    Overcoat(const std::string& type, double price) : type(type), price(price) {}
+
+    // Перевантаження оператора "=="
+    bool operator==(const Overcoat& other) const {
+        return this->type == other.type;
+    }
+
+    // Перевантаження оператора "="
+    Overcoat& operator=(const Overcoat& other) {
+        if (this == &other) {
+            return *this; // Перевірка на самоприсвоєння
         }
-        simplify();
+        this->type = other.type;
+        this->price = other.price;
+        return *this;
     }
 
-    // Operator overloading for addition
-    Fraction operator+(const Fraction& other) const {
-        int num = numerator * other.denominator + other.numerator * denominator;
-        int denom = denominator * other.denominator;
-        return Fraction(num, denom);
-    }
-
-    // Operator overloading for subtraction
-    Fraction operator-(const Fraction& other) const {
-        int num = numerator * other.denominator - other.numerator * denominator;
-        int denom = denominator * other.denominator;
-        return Fraction(num, denom);
-    }
-
-    // Operator overloading for multiplication
-    Fraction operator*(const Fraction& other) const {
-        int num = numerator * other.numerator;
-        int denom = denominator * other.denominator;
-        return Fraction(num, denom);
-    }
-
-    // Operator overloading for division
-    Fraction operator/(const Fraction& other) const {
-        if (other.numerator == 0) {
-            throw "Cannot divide by zero";
+    // Перевантаження оператора ">"
+    bool operator>(const Overcoat& other) const {
+        if (this->type == other.type) {
+            return this->price > other.price;
         }
-        int num = numerator * other.denominator;
-        int denom = denominator * other.numerator;
-        return Fraction(num, denom);
+        return false; // Повертає false, якщо типи не співпадають
     }
 
-    // Friend function to output the fraction
-    friend std::ostream& operator<<(std::ostream& os, const Fraction& fraction) {
-        os << fraction.numerator << "/" << fraction.denominator;
-        return os;
+    // Метод для виведення інформації про об'єкт
+    void print() const {
+        std::cout << "Type: " << type << ", Price: " << price << std::endl;
     }
 };
 
 int main() {
-    try {
-        Fraction f1(1, 2);
-        Fraction f2(3, 4);
+    Overcoat coat1("Trench", 150.0);
+    Overcoat coat2("Trench", 200.0);
+    Overcoat coat3("Jacket", 100.0);
 
-        Fraction resultAdd = f1 + f2;
-        Fraction resultSub = f1 - f2;
-        Fraction resultMul = f1 * f2;
-        Fraction resultDiv = f1 / f2;
+    // Перевірка на рівність типів
+    if (coat1 == coat2) {
+        std::cout << "Coat1 and Coat2 are of the same type." << std::endl;
+    } else {
+        std::cout << "Coat1 and Coat2 are of different types." << std::endl;
+    }
 
-        std::cout << "Addition: " << resultAdd << std::endl;
-        std::cout << "Subtraction: " << resultSub << std::endl;
-        std::cout << "Multiplication: " << resultMul << std::endl;
-        std::cout << "Division: " << resultDiv << std::endl;
-    } catch (const char* e) {
-        std::cerr << "Error: " << e << std::endl;
+    // Присвоєння одного об'єкта іншому
+    coat3 = coat1;
+    coat3.print();
+
+    // Порівняння за ціною
+    if (coat2 > coat1) {
+        std::cout << "Coat2 is more expensive than Coat1." << std::endl;
+    } else {
+        std::cout << "Coat2 is not more expensive than Coat1." << std::endl;
     }
 
     return 0;
