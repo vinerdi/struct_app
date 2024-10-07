@@ -67,22 +67,19 @@ public:
 };
 
 int main() {
-    try {
-        Fraction f1(1, 2);
-        Fraction f2(3, 4);
+    Fraction f1(1, 2);
+    Fraction f2(3, 4);
+    
+    Fraction resultAdd = f1 + f2;
+    Fraction resultSub = f1 - f2;
+    Fraction resultMul = f1 * f2;
+    Fraction resultDiv = f1 / f2;
+    
+    std::cout << "Addition: " << resultAdd << std::endl;
+    std::cout << "Subtraction: " << resultSub << std::endl;
+    std::cout << "Multiplication: " << resultMul << std::endl;
+    std::cout << "Division: " << resultDiv << std::endl;
 
-        Fraction resultAdd = f1 + f2;
-        Fraction resultSub = f1 - f2;
-        Fraction resultMul = f1 * f2;
-        Fraction resultDiv = f1 / f2;
-
-        std::cout << "Addition: " << resultAdd << std::endl;
-        std::cout << "Subtraction: " << resultSub << std::endl;
-        std::cout << "Multiplication: " << resultMul << std::endl;
-        std::cout << "Division: " << resultDiv << std::endl;
-    } catch (const char* e) {
-        std::cerr << "Error: " << e << std::endl;
-    }
 
 
     return 0;
