@@ -1,88 +1,62 @@
 #include <iostream>
 
-class Fraction {
+class Complex {
 private:
-    int numerator;
-    int denominator;
-
-    void simplify() {
-        int gcd = calculateGCD(numerator, denominator);
-        numerator /= gcd;
-        denominator /= gcd;
-    }
-
-    int calculateGCD(int a, int b) {
-        while (b != 0) {
-            int temp = b;
-            b = a % b;
-            a = temp;
-        }
-        return a;
-    }
+    double real;
+    double imag;
 
 public:
-    Fraction(int num, int denom) : numerator(num), denominator(denom) {
-        if (denom == 0) {
-            throw "Denominator cannot be zero";
-        }
-        simplify();
+    // Constructor
+    Complex(double r = 0, double i = 0) : real(r), imag(i) {}
+
+    // Overloaded + operator
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real, imag + other.imag);
     }
 
-    // Operator overloading for addition
-    Fraction operator+(const Fraction& other) const {
-        int num = numerator * other.denominator + other.numerator * denominator;
-        int denom = denominator * other.denominator;
-        return Fraction(num, denom);
+    // Overloaded - operator
+    Complex operator-(const Complex& other) const {
+        return Complex(real - other.real, imag - other.imag);
     }
 
-    // Operator overloading for subtraction
-    Fraction operator-(const Fraction& other) const {
-        int num = numerator * other.denominator - other.numerator * denominator;
-        int denom = denominator * other.denominator;
-        return Fraction(num, denom);
+    // Overloaded * operator
+    Complex operator*(const Complex& other) const {
+        return Complex(real * other.real - imag * other.imag, real * other.imag + imag * other.real);
     }
 
-    // Operator overloading for multiplication
-    Fraction operator*(const Fraction& other) const {
-        int num = numerator * other.numerator;
-        int denom = denominator * other.denominator;
-        return Fraction(num, denom);
+    // Overloaded / operator
+    Complex operator/(const Complex& other) const {
+        double denominator = other.real * other.real + other.imag * other.imag;
+        return Complex((real * other.real + imag * other.imag) / denominator, 
+                       (imag * other.real - real * other.imag) / denominator);
     }
 
-    // Operator overloading for division
-    Fraction operator/(const Fraction& other) const {
-        if (other.numerator == 0) {
-            throw "Cannot divide by zero";
-        }
-        int num = numerator * other.denominator;
-        int denom = denominator * other.numerator;
-        return Fraction(num, denom);
-    }
-
-    // Friend function to output the fraction
-    friend std::ostream& operator<<(std::ostream& os, const Fraction& fraction) {
-        os << fraction.numerator << "/" << fraction.denominator;
-        return os;
+    // Function to print complex number
+    void print() const {
+        if (imag >= 0)
+            std::cout << real << " + " << imag << "i" << std::endl;
+        else
+            std::cout << real << " - " << -imag << "i" << std::endl;
     }
 };
 
 int main() {
-    try {
-        Fraction f1(1, 2);
-        Fraction f2(3, 4);
+    Complex c1(3, 2);
+    Complex c2(1, 7);
 
-        Fraction resultAdd = f1 + f2;
-        Fraction resultSub = f1 - f2;
-        Fraction resultMul = f1 * f2;
-        Fraction resultDiv = f1 / f2;
+    Complex sum = c1 + c2;
+    Complex diff = c1 - c2;
+    Complex prod = c1 * c2;
+    Complex quot = c1 / c2;
 
-        std::cout << "Addition: " << resultAdd << std::endl;
-        std::cout << "Subtraction: " << resultSub << std::endl;
-        std::cout << "Multiplication: " << resultMul << std::endl;
-        std::cout << "Division: " << resultDiv << std::endl;
-    } catch (const char* e) {
-        std::cerr << "Error: " << e << std::endl;
-    }
+    std::cout << "Sum: ";
+    sum.print();
+    std::cout << "Difference: ";
+    diff.print();
+    std::cout << "Product: ";
+    prod.print();
+    std::cout << "Quotient: ";
+    quot.print();
 
     return 0;
 }
